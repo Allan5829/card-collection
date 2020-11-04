@@ -1,38 +1,19 @@
 const collectionContainer = document.getElementById("collection-container");
 const newCardForm = document.getElementById("new-card-form"); 
 
-let notListedTable = document.getElementById("not-listed"); //delete
-let testButton = document.getElementById("test-button")
-let test = `
-            <tr>
-              <th> Not Listed </th>
-            </tr>
-
+let testButton = document.getElementById("test-button") //delete
+let test = ` 
             <tr> 
               <td> - indvidual card </td>
             </tr>
-            `
+            ` //delete
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded") //delete
-  testButton.addEventListener("click", testFunction) //delete
-  
-  newCardForm.addEventListener("submit", function(event){
-    event.preventDefault();
-    testSubmit(event);
-  })
 
-  Generate.createCollectionTables()
+  Generate.createCollectionTables();
+  Generate.addCardFormButton();
 });
-
-function testSubmit(e) {
-  console.log(e);
-}
-
-function testFunction() { //delete
-  console.log("do I see this?")
-  notListedTable.innerHTML += test
-}
 
 class Generate {
 
@@ -40,6 +21,19 @@ class Generate {
     // would fetch collection names
     let collNames = ["Not Listed", "Vivid Voltage", "Darkness Ablaze"]
     collNames.forEach(n => collectionContainer.innerHTML += `<table id="${n}"> </table>`)
+  }
+
+  static addCardFormButton() {
+    newCardForm.addEventListener("submit", function(event){
+      event.preventDefault();
+      console.log(document.getElementById("collection").value);
+      Generate.addHeaderToTable(document.getElementById("collection").value);
+    })
+  }
+
+  static addHeaderToTable(value) { //temporary because will only occur if collection has no cards
+    let table = document.getElementById(`${value}`);
+    table.innerHTML += `<tr> <th> ${value} </th> </tr>` 
   }
 
 }
