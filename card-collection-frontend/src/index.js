@@ -1,8 +1,14 @@
 const collectionContainer = document.getElementById("collection-container");
 const newCardForm = document.getElementById("new-card-form"); 
 
+const BACKEND_URL = 'http://localhost:3000';
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded") //delete later
+  
+  fetch(`${BACKEND_URL}/collections`)
+    .then(response => response.json())
+    .then(x => console.log(x));
 
   Generate.createCollectionTables();
   Generate.addCardFormButton();
