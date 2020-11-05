@@ -8,3 +8,4 @@
 set_1 = Collection.create(name: "Not Listed")
 set_2 = Collection.create(name: "Vivid Voltage")
 set_3 = Collection.create(name: "Darkness Ablaze")
+set_4 = Collection.create(name: "Rebel Clash")

@@ -6,31 +6,24 @@ const BACKEND_URL = 'http://localhost:3000';
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded") //delete later
 
-  
-
-  Generate.createCollectionTables();
+  Fetch.fetchCollectionIndex();
   Generate.addCardFormButton();
-
-  fetch(`${BACKEND_URL}/collections`)
-    .then(response => response.json())
-    .then(x => exFetch(x))
 
 });
 
-function exFetch(x) {
-  let example = x;
-  //this.exFetch.arguments[0][0].name
-}
-
 class Generate {
 
-  static createCollectionTables() {
-    // would fetch collection names
-    let collNames = ["Not Listed", "Vivid Voltage", "Darkness Ablaze"]
+  static createCollectionTables(array) {
+    let collNames = array.map(x => x.name)
     collNames.forEach(function(n){
       collectionContainer.innerHTML += `<table id="${n}"> </table>`
       Generate.addHeaderToTable(n);
     })
+  }
+
+  static addHeaderToTable(value) {
+    let table = document.getElementById(`${value}`);
+    table.innerHTML += `<tr id="coll-row-${value}"> <th> ${value} </th> </tr>` 
   }
 
   static addCardFormButton() {
@@ -48,14 +41,19 @@ class Generate {
     })
   }
 
-  static addHeaderToTable(value) {
-    let table = document.getElementById(`${value}`);
-    table.innerHTML += `<tr id="coll-row-${value}"> <th> ${value} </th> </tr>` 
-  }
-
   static addCardToTable(card) { //to be relocated
     let table = document.getElementById("collection").value;
     document.getElementById(table).innerHTML += `<tr id="card-row-${card}"> <td> ${card} </td> </tr>`
+  }
+
+}
+
+class Fetch {
+
+  static fetchCollectionIndex() {
+    fetch(`${BACKEND_URL}/collections`)
+      .then(response => response.json())
+      .then(collections => Generate.createCollectionTables(collections))
   }
 
 }
