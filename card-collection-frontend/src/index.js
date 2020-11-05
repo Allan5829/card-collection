@@ -1,15 +1,8 @@
 const collectionContainer = document.getElementById("collection-container");
 const newCardForm = document.getElementById("new-card-form"); 
 
-let testButton = document.getElementById("test-button") //delete
-let test = ` 
-            <tr> 
-              <td> - indvidual card </td>
-            </tr>
-            ` //delete
-
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded") //delete
+  console.log("DOMContentLoaded") //delete later
 
   Generate.createCollectionTables();
   Generate.addCardFormButton();
@@ -43,12 +36,12 @@ class Generate {
 
   static addHeaderToTable(value) {
     let table = document.getElementById(`${value}`);
-    table.innerHTML += `<tr> <th> ${value} </th> </tr>` 
+    table.innerHTML += `<tr id="coll-row-${value}"> <th> ${value} </th> </tr>` 
   }
 
   static addCardToTable(card) { //to be relocated
     let table = document.getElementById("collection").value;
-    document.getElementById(table).innerHTML += `<tr> <td> ${card} </td> </tr>`
+    document.getElementById(table).innerHTML += `<tr id="card-row-${card}"> <td> ${card} </td> </tr>`
   }
 
 }
