@@ -9,3 +9,8 @@ set_1 = Collection.create(name: "Not Listed")
 set_2 = Collection.create(name: "Vivid Voltage")
 set_3 = Collection.create(name: "Darkness Ablaze")
 set_4 = Collection.create(name: "Rebel Clash")
+
+card_1 = Card.create(name: "Rillaboom", collection_id: 4)
+card_2 = Card.create(name: "Pikachu", collection_id: 2)
+card_3 = Card.create(name: "Charizard", collection_id: 3)
+card_4 = Card.create(name: "Charmander", collection_id: 3)

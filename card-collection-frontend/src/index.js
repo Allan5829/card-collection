@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+//use to delete cards ->  document.getElementById(`card-row-${card.name}`).parentElement.remove()
+
 class Generate {
 
   static createCollectionTables(array) {
@@ -19,11 +21,19 @@ class Generate {
       collectionContainer.innerHTML += `<table id="${n}"> </table>`
       Generate.addHeaderToTable(n);
     })
+    Generate.addExistingCards(array);
   }
 
   static addHeaderToTable(value) {
     let table = document.getElementById(`${value}`);
     table.innerHTML += `<tr id="coll-row-${value}"> <th> ${value} </th> </tr>` 
+  }
+
+  static addExistingCards(array) {
+    array.forEach(function(collection) {
+      let set = document.getElementById(collection.name)
+      collection.cards.forEach(card => set.innerHTML += `<tr id="card-row-${card.name}"> <td> ${card.name} </td> </tr>`)
+    })
   }
 
   static addCardFormButton() {
