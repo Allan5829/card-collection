@@ -5,14 +5,22 @@ const BACKEND_URL = 'http://localhost:3000';
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded") //delete later
+
   
-  fetch(`${BACKEND_URL}/collections`)
-    .then(response => response.json())
-    .then(x => console.log(x));
 
   Generate.createCollectionTables();
   Generate.addCardFormButton();
+
+  fetch(`${BACKEND_URL}/collections`)
+    .then(response => response.json())
+    .then(x => exFetch(x))
+
 });
+
+function exFetch(x) {
+  let example = x;
+  //this.exFetch.arguments[0][0].name
+}
 
 class Generate {
 

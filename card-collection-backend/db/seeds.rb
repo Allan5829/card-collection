@@ -5,3 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+set_1 = Collection.create(name: "Not Listed")
+set_2 = Collection.create(name: "Vivid Voltage")
+set_3 = Collection.create(name: "Darkness Ablaze")

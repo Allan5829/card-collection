@@ -1,5 +1,6 @@
 class CollectionsController < ApplicationController
     def index
-        render json: { test: "success" }
+        sets = Collection.all
+        render json: sets 
     end
 end
