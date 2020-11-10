@@ -26,7 +26,7 @@ class Collection {
     let collNames = array.map(x => x.name)
     collNames.forEach(x => {
       collectionContainer.innerHTML += `<table id="${x}"> </table>`
-      collectionOptions.innerHTML += `<option value="${x}">${x}</option>`
+      collectionOptions.innerHTML += `<option id="form-collection-${x}" value="${x}">${x}</option>`
       Generate.addHeaderToTable(x);
     })
     Card.addExistingCards(array);
@@ -46,9 +46,34 @@ class Card {
     })
   }
 
-  static addCardToTable(card) { //to be relocated
-    let table = collectionOptions.value;
-    document.getElementById(table).innerHTML += `<tr id="card-row-${card}"> <td> ${card} </td> </tr>`
+  static addCardToTable(card) {
+    //debugger
+    let table = document.getElementById(`${collectionOptions.value}`);
+    table.innerHTML += `<tr id="card-row-${card.name}"> <td> ${card.name} </td> </tr>`
+    let cardInput = document.getElementById("card-name")
+    cardInput.value = ""
+  }
+
+  static fetchCardNew() {
+    let newCard = {
+      name: document.getElementById("card-name").value,
+      collection_id: document.getElementById(`form-collection-${collectionOptions.value}`).index + 1
+    };
+
+    let configObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(newCard)
+    };
+
+    console.log(newCard)
+    fetch(`${BACKEND_URL}/cards`, configObj)
+      .then(response => response.json())
+      .then(card => Card.addCardToTable(card))
+      //.then(card => console.log(card))
   }
 
 }
@@ -66,12 +91,13 @@ class Generate {
       console.log(collectionOptions.value);
 
       //bottom code will be relocated
-      let card = document.getElementById("card-name") //if card equals the value not the element 
+      //let card = document.getElementById("card-name") //if card equals the value not the element 
                                   //then I can't change the value of the card to an empty string
-      console.log(card.value);
-      Card.addCardToTable(card.value);
-      card.value = ""
+      //console.log(card.value);
+      //Card.addCardToTable(card.value);
+      //card.value = ""
       //debugger
+      Card.fetchCardNew();
     })
   }
 
