@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   Generate.addCardFormButton();
 });
 
-//use to delete cards ->  document.getElementById(`card-row-${card.name}`).parentElement.remove()
-
 class Collection {
 
   static fetchCollectionIndex() {
@@ -38,7 +36,7 @@ class Card {
     array.forEach( collection => {
       let set = document.getElementById(collection.name)
       collection.cards.forEach(card => { 
-        set.innerHTML += `<tr id="card-row-${card.name}"> <td> <button>X</button> ${card.name} </td> </tr>`
+        set.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
       })
     })
     Generate.addDeleteButtonToCards();
@@ -66,10 +64,25 @@ class Card {
 
   static addCardToTable(card) {
     let table = document.getElementById(`${collectionOptions.value}`);
-    table.innerHTML += `<tr id="card-row-${card.name}"> <td> ${card.name} </td> </tr>`
+    table.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
     let cardInput = document.getElementById("card-name")
     cardInput.value = ""
+    Generate.addDeleteButtonToNewCard(`card-row-${card.name}`);
   }
+
+  static deleteCard () {
+    let card_id = this.id
+    let cardData = document.getElementById(`${this.parentElement.parentElement.id}`)
+    const configObj = {
+      method: 'DELETE',
+      headers: { 
+          'Content-Type': 'application/json'
+      }
+    }
+
+    fetch(`${BACKEND_URL}` + "/cards" + `/${card_id}`, configObj)
+    .then( cardData.parentElement.remove())
+    }
 
 }
 
@@ -87,19 +100,16 @@ class Generate {
     })
   }
 
-  static addDeleteButtonToNewCard() {
-
+  static addDeleteButtonToNewCard(id) {
+    let cardRow = document.getElementById(id)
+    cardRow.querySelector("button").addEventListener("click", Card.deleteCard)
   }
 
   static addDeleteButtonToCards() {
     let buttons = collectionContainer.querySelectorAll("button")
     for (let button of buttons) {
-      button.addEventListener("click", Generate.example)
+      button.addEventListener("click", Card.deleteCard)
     }
-  }
-
-  static example() {
-    console.log(this.parentElement.parentElement.id)
   }
 
 }

@@ -13,4 +13,8 @@ class CardsController < ApplicationController
         render json: card.to_json
     end 
 
+    def destroy
+        Card.find_by(id: params[:id]).delete
+    end 
+
 end
