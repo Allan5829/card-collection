@@ -38,9 +38,10 @@ class Card {
     array.forEach( collection => {
       let set = document.getElementById(collection.name)
       collection.cards.forEach(card => { 
-        set.innerHTML += `<tr id="card-row-${card.name}"> <td> ${card.name} </td> </tr>`
+        set.innerHTML += `<tr id="card-row-${card.name}"> <td> <button>X</button> ${card.name} </td> </tr>`
       })
     })
+    Generate.addDeleteButtonToCards();
   }
 
   static fetchCardNew() {
@@ -84,6 +85,21 @@ class Generate {
       e.preventDefault();
       Card.fetchCardNew();
     })
+  }
+
+  static addDeleteButtonToNewCard() {
+
+  }
+
+  static addDeleteButtonToCards() {
+    let buttons = collectionContainer.querySelectorAll("button")
+    for (let button of buttons) {
+      button.addEventListener("click", Generate.example)
+    }
+  }
+
+  static example() {
+    console.log(this.parentElement.parentElement.id)
   }
 
 }
