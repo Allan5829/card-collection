@@ -6,11 +6,10 @@ class CardsController < ApplicationController
     end
 
     def create
-        card = Card.create(
-            name: params[:name],
-            collection_id: params[:collection_id])
-        
-        render json: card.to_json
+        card = Card.new(name: params[:name], collection_id: params[:collection_id])
+        if card.save
+            render json: card.to_json
+        end 
     end 
 
     def destroy

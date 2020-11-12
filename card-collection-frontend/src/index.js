@@ -78,9 +78,10 @@ class Card {
       fetch(`${BACKEND_URL}/cards`, configObj)
         .then(response => response.json())
         .then(card => Card.addCardToTable(card))
+        .catch(error => {alert("You can't add a card with no name!");})
 
     } else {
-      setTimeout(x => { alert("You can't add a card to a collection that already has a card with that name!"); });
+      alert("You can't add a card to a collection that already has a card with that name!");
     }
     
   }
