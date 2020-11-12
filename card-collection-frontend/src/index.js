@@ -22,7 +22,6 @@ class Collection {
     collNames.forEach(x => {
       collectionContainer.innerHTML += `<table id="${x}"> </table>`
       collectionOptions.innerHTML += `<option id="form-collection-${x}" value="${x}">${x}</option>`
-      Generate.addHeaderToTable(x);
     })
     Card.addExistingCards(array);
   }
@@ -34,10 +33,15 @@ class Card {
   static addExistingCards(array) {
     // for each collection, add some html with unique information for each card in a collection
     array.forEach( collection => {
-      let set = document.getElementById(collection.name)
-      collection.cards.forEach(card => { 
-        set.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
-      })
+      if (collection.cards.length === 0) {
+        // will only create collection header and cards if there are any cards in the collection
+      } else {
+        let set = document.getElementById(collection.name);
+        set.innerHTML += `<tr id="coll-row-${collection.name}"> <th> ${collection.name} </th> </tr>`
+        collection.cards.forEach(card => { 
+          set.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
+        })
+      }
     })
     Generate.addDeleteButtonToCards();
   }
@@ -57,13 +61,19 @@ class Card {
       body: JSON.stringify(newCard)
     };
 
+    let table = document.getElementById(collectionOptions.value);
+    // adds collection header if there isn't one currently present for this collection
+    if (table.rows.length === 0) {
+      table.innerHTML += `<tr id="coll-row-${collectionOptions.value}"> <th> ${collectionOptions.value} </th> </tr>`
+    }
+
     fetch(`${BACKEND_URL}/cards`, configObj)
       .then(response => response.json())
       .then(card => Card.addCardToTable(card))
   }
 
   static addCardToTable(card) {
-    let table = document.getElementById(`${collectionOptions.value}`);
+    let table = document.getElementById(collectionOptions.value);
     table.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
     let cardInput = document.getElementById("card-name")
     cardInput.value = ""
@@ -80,18 +90,21 @@ class Card {
       }
     }
 
+    // if the user is deleting the last card in the card's collection then the collection header will 
+    //  also be removed
+    let table = cardData.parentElement.parentElement;
+    // this checks for 2 rows because one is the header and the other is the last card
+    if (table.rows.length === 2) { 
+      table.rows[0].parentElement.remove()
+    }
+
     fetch(`${BACKEND_URL}` + "/cards" + `/${card_id}`, configObj)
     .then( cardData.parentElement.remove())
-    }
+    };
 
 }
 
 class Generate {
-
-  static addHeaderToTable(value) {
-    let table = document.getElementById(`${value}`);
-    table.innerHTML += `<tr id="coll-row-${value}"> <th> ${value} </th> </tr>` 
-  }
 
   static addCardFormButton() {
     newCardForm.addEventListener("submit", e => {
