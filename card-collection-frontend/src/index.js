@@ -26,6 +26,12 @@ class Collection {
     Card.addExistingCards(array);
   }
 
+  static fetchCollectionShow(id) {
+    fetch(`${BACKEND_URL}/collections` + `/${id}`)
+    .then(response => response.json())
+    .then(collection => Card.checkForDublicate(collection))
+  }
+
 }
 
 class Card {
@@ -61,15 +67,20 @@ class Card {
       body: JSON.stringify(newCard)
     };
 
-    let table = document.getElementById(collectionOptions.value);
-    // adds collection header if there isn't one currently present for this collection
-    if (table.rows.length === 0) {
-      table.innerHTML += `<tr id="coll-row-${collectionOptions.value}"> <th> ${collectionOptions.value} </th> </tr>`
-    }
+    if (example()) {
+      let table = document.getElementById(collectionOptions.value);
+      // adds collection header if there isn't one currently present for this collection
+      if (table.rows.length === 0) {
+        table.innerHTML += `<tr id="coll-row-${collectionOptions.value}"> <th> ${collectionOptions.value} </th> </tr>`
+      }
 
-    fetch(`${BACKEND_URL}/cards`, configObj)
-      .then(response => response.json())
-      .then(card => Card.addCardToTable(card))
+      fetch(`${BACKEND_URL}/cards`, configObj)
+        .then(response => response.json())
+        .then(card => Card.addCardToTable(card))
+    } else {
+      setTimeout(x => { alert("You can't add a card to a collection that already has a card with that name!"); });
+    }
+    
   }
 
   static addCardToTable(card) {
@@ -77,7 +88,7 @@ class Card {
     table.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
     let cardInput = document.getElementById("card-name")
     cardInput.value = ""
-    Generate.addDeleteButtonToNewCard(`card-row-${card.name}`);
+    Generate.addDeleteButtonToNewCard(table);
   }
 
   static deleteCard () {
@@ -98,9 +109,14 @@ class Card {
       table.rows[0].parentElement.remove()
     }
 
-    fetch(`${BACKEND_URL}` + "/cards" + `/${card_id}`, configObj)
+    fetch(`${BACKEND_URL}/cards` + `/${card_id}`, configObj)
     .then( cardData.parentElement.remove())
     };
+
+    static checkForDublicate(collection) {
+      let input = document.getElementById("card-name").value
+      debugger
+    }
 
 }
 
@@ -113,9 +129,13 @@ class Generate {
     })
   }
 
-  static addDeleteButtonToNewCard(id) {
-    let cardRow = document.getElementById(id)
-    cardRow.querySelector("button").addEventListener("click", Card.deleteCard)
+  static addDeleteButtonToNewCard(table) {
+    //let cardRow = document.getElementById(id = `card-row-${card.name}`)
+    //cardRow.querySelector("button").addEventListener("click", Card.deleteCard)
+    let buttons = table.querySelectorAll("button")
+    for (let button of buttons) {
+      button.addEventListener("click", Card.deleteCard)
+    }
   }
 
   static addDeleteButtonToCards() {
@@ -125,4 +145,16 @@ class Generate {
     }
   }
 
+}
+
+function example() {
+  let table = document.getElementById(collectionOptions.value)
+  let name = document.getElementById("card-name").value
+  let doesCardExist = document.getElementById(`card-row-${name}`)
+  if (doesCardExist && table.id === doesCardExist.parentElement.parentElement.id) {
+    return false
+  } else {
+    return true 
+  }
+  //debugger 
 }
