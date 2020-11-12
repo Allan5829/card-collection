@@ -1,5 +1,5 @@
 const collectionContainer = document.getElementById("collection-container");
-const collectionOptions = document.getElementById("form-collection-options")
+const collectionOptions = document.getElementById("form-collection-options");
 const newCardForm = document.getElementById("new-card-form"); 
 
 const BACKEND_URL = 'http://localhost:3000';
@@ -67,16 +67,18 @@ class Card {
       body: JSON.stringify(newCard)
     };
 
-    if (example()) {
-      let table = document.getElementById(collectionOptions.value);
-      // adds collection header if there isn't one currently present for this collection
+    let table = document.getElementById(collectionOptions.value);
+    if (Card.checkForDublicate(table, newCard.name)) { //if there is no dublicate card a new one is created
+      
       if (table.rows.length === 0) {
+        // adds collection header if there isn't one currently present for this collection
         table.innerHTML += `<tr id="coll-row-${collectionOptions.value}"> <th> ${collectionOptions.value} </th> </tr>`
       }
 
       fetch(`${BACKEND_URL}/cards`, configObj)
         .then(response => response.json())
         .then(card => Card.addCardToTable(card))
+
     } else {
       setTimeout(x => { alert("You can't add a card to a collection that already has a card with that name!"); });
     }
@@ -91,7 +93,7 @@ class Card {
     Generate.addDeleteButtonToNewCard(table);
   }
 
-  static deleteCard () {
+  static fetchCardDelete() {
     let card_id = this.id
     let cardData = document.getElementById(`${this.parentElement.parentElement.id}`)
     const configObj = {
@@ -104,8 +106,8 @@ class Card {
     // if the user is deleting the last card in the card's collection then the collection header will 
     //  also be removed
     let table = cardData.parentElement.parentElement;
-    // this checks for 2 rows because one is the header and the other is the last card
     if (table.rows.length === 2) { 
+      // this checks for 2 rows because one is the header and the other is the last card
       table.rows[0].parentElement.remove()
     }
 
@@ -113,9 +115,13 @@ class Card {
     .then( cardData.parentElement.remove())
     };
 
-    static checkForDublicate(collection) {
-      let input = document.getElementById("card-name").value
-      debugger
+    static checkForDublicate(table, name) {
+      let doesCardExist = document.getElementById(`card-row-${name}`)
+      if (doesCardExist && table.id === doesCardExist.parentElement.parentElement.id) {
+        return false
+      } else {
+        return true 
+      }
     }
 
 }
@@ -130,31 +136,24 @@ class Generate {
   }
 
   static addDeleteButtonToNewCard(table) {
-    //let cardRow = document.getElementById(id = `card-row-${card.name}`)
+    //There was a bug with the commented code below. It is kept for the purposes of dublicating the error
+    //  to see why it created the bug it did.
+
+    // (`card-row-${card.name}`) = arguement(id)
+    //let cardRow = document.getElementById(id)
     //cardRow.querySelector("button").addEventListener("click", Card.deleteCard)
+
     let buttons = table.querySelectorAll("button")
     for (let button of buttons) {
-      button.addEventListener("click", Card.deleteCard)
+      button.addEventListener("click", Card.fetchCardDelete)
     }
   }
 
   static addDeleteButtonToCards() {
     let buttons = collectionContainer.querySelectorAll("button")
     for (let button of buttons) {
-      button.addEventListener("click", Card.deleteCard)
+      button.addEventListener("click", Card.fetchCardDelete)
     }
   }
 
-}
-
-function example() {
-  let table = document.getElementById(collectionOptions.value)
-  let name = document.getElementById("card-name").value
-  let doesCardExist = document.getElementById(`card-row-${name}`)
-  if (doesCardExist && table.id === doesCardExist.parentElement.parentElement.id) {
-    return false
-  } else {
-    return true 
-  }
-  //debugger 
 }
