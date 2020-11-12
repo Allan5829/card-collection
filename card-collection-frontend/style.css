@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    padding: 0;
+  }
+
+  header h2 {
+    background-color: rgb(253, 116, 116);
+    margin: auto;
+    height: 50px;
+    color:black;
+  }
+
+  form {
+      background-color: antiquewhite;
+      display: block;
+      padding: 10px;
+      border: 10px solid rgb(156, 228, 233);
+  }
+
+  table {
+    padding: 10px;
+  }
