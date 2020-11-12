@@ -1,7 +1,8 @@
 const collectionContainer = document.getElementById("collection-container");
 const collectionOptions = document.getElementById("form-collection-options");
 const newCardForm = document.getElementById("new-card-form"); 
-
+const yesCol = document.getElementById("yesCol");
+const noCol = document.getElementById("noCol");
 const BACKEND_URL = 'http://localhost:3000';
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -69,25 +70,21 @@ class Card {
 
     let table = document.getElementById(collectionOptions.value);
     if (Card.checkForDublicate(table, newCard.name)) { //if there is no dublicate card a new one is created
-      
-      if (table.rows.length === 0) {
-        // adds collection header if there isn't one currently present for this collection
-        table.innerHTML += `<tr id="coll-row-${collectionOptions.value}"> <th> ${collectionOptions.value} </th> </tr>`
-      }
-
       fetch(`${BACKEND_URL}/cards`, configObj)
         .then(response => response.json())
-        .then(card => Card.addCardToTable(card))
+        .then(card => Card.addCardToTable(card, table))
         .catch(error => {alert("You can't add a card with no name!");})
-
     } else {
       alert("You can't add a card to a collection that already has a card with that name!");
     }
     
   }
 
-  static addCardToTable(card) {
-    let table = document.getElementById(collectionOptions.value);
+  static addCardToTable(card, table) {
+    if (table.rows.length === 0) {
+      // adds collection header if there isn't one currently present for this collection
+      table.innerHTML += `<tr id="coll-row-${collectionOptions.value}"> <th> ${collectionOptions.value} </th> </tr>`
+    }
     table.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
     let cardInput = document.getElementById("card-name")
     cardInput.value = ""
@@ -133,6 +130,18 @@ class Generate {
     newCardForm.addEventListener("submit", e => {
       e.preventDefault();
       Card.fetchCardNew();
+    })
+    yesCol.disabled = true;
+    noCol.disabled = false;
+    yesCol.addEventListener("click", e => {
+      console.log("yes")
+      yesCol.disabled = true;
+      noCol.disabled = false;
+    })
+    noCol.addEventListener("click", e => {
+      console.log("no")
+      noCol.disabled = true;
+      yesCol.disabled = false;
     })
   }
 
