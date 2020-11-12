@@ -7,7 +7,7 @@ const BACKEND_URL = 'http://localhost:3000';
 
 document.addEventListener("DOMContentLoaded", () => {
   Collection.fetchCollectionIndex();
-  Generate.addCardFormButton();
+  Generate.addEventsToButtons();
 });
 
 class Collection {
@@ -69,6 +69,10 @@ class Card {
     };
 
     let table = document.getElementById(collectionOptions.value);
+    if (table === null) { 
+      // would only ever be null if collections aren't displayed
+      table = document.getElementById("all-cards")
+    }
     if (Card.checkForDublicate(table, newCard.name)) { //if there is no dublicate card a new one is created
       fetch(`${BACKEND_URL}/cards`, configObj)
         .then(response => response.json())
@@ -115,6 +119,7 @@ class Card {
 
     static checkForDublicate(table, name) {
       let doesCardExist = document.getElementById(`card-row-${name}`)
+      // add another if condition where if id="all-cards" then do a different condition with a fetch
       if (doesCardExist && table.id === doesCardExist.parentElement.parentElement.id) {
         return false
       } else {
@@ -122,26 +127,47 @@ class Card {
       }
     }
 
+    static fetchCardIndex() {
+      fetch(`${BACKEND_URL}/cards`)
+      .then(response => response.json())
+      .then(cards => Card.addOnlyCardsToTable(cards))
+    }
+
+    static addOnlyCardsToTable(cards) {
+      collectionContainer.innerHTML += `<table id="all-cards"> </table>`
+      let table = document.getElementById("all-cards");
+      cards.forEach(card => { 
+        table.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
+      })
+      Generate.addDeleteButtonToCards();
+    }
+
 }
 
 class Generate {
 
-  static addCardFormButton() {
+  static addEventsToButtons() {
+    yesCol.disabled = true;
+    noCol.disabled = false;
+
     newCardForm.addEventListener("submit", e => {
       e.preventDefault();
       Card.fetchCardNew();
     })
-    yesCol.disabled = true;
-    noCol.disabled = false;
+    
     yesCol.addEventListener("click", e => {
-      console.log("yes")
       yesCol.disabled = true;
       noCol.disabled = false;
+      collectionContainer.innerHTML = ""
+      collectionOptions.innerHTML = ""
+      Collection.fetchCollectionIndex();
     })
+
     noCol.addEventListener("click", e => {
-      console.log("no")
       noCol.disabled = true;
       yesCol.disabled = false;
+      collectionContainer.innerHTML = ""
+      Card.fetchCardIndex();
     })
   }
 
