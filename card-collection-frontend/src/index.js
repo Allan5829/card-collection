@@ -7,7 +7,6 @@ const BACKEND_URL = 'http://localhost:3000';
 
 document.addEventListener("DOMContentLoaded", () => {
   Generate.buildNewCardForm();
-  collectionOptions = document.getElementById("form-collection-options")
   Collection.fetchCollectionIndex();
   Generate.addEventsToButtons();
 });
@@ -145,6 +144,7 @@ class Card {
 class Generate {
 
   static buildNewCardForm() {
+    newCardForm.innerHTML = ""
     newCardForm.innerHTML += `
       <label for="collections">What collection is the card from:</label>
       <select name="collection" id="form-collection-options">
@@ -155,23 +155,21 @@ class Generate {
 
       <button type="submit"> Add Card </button>
     `
+    collectionOptions = document.getElementById("form-collection-options")
+    newCardForm[2].addEventListener("click", e => {
+      e.preventDefault();
+      Card.fetchCardNew();
+    })
   }
 
   static addEventsToButtons() {
     allCol.disabled = true;
-
-    newCardForm.addEventListener("submit", e => {
-      e.preventDefault();
-      Card.fetchCardNew();
-    })
     
     allCol.addEventListener("click", e => {
       allCol.disabled = true;
       allCard.disabled = false;
       collectionContainer.innerHTML = ""
-      collectionOptions.innerHTML = ""
       Generate.buildNewCardForm();
-      collectionOptions = document.getElementById("form-collection-options")
       Collection.fetchCollectionIndex();
     })
 
@@ -179,7 +177,7 @@ class Generate {
       allCard.disabled = true;
       allCol.disabled = false;
       collectionContainer.innerHTML = ""
-      newCardForm.innerHTML = ""
+      Generate.buildSortFilterForm();
       Card.fetchCardIndex();
     })
   }
@@ -204,6 +202,23 @@ class Generate {
     for (let button of buttons) {
       button.addEventListener("click", Card.fetchCardDelete)
     }
+  }
+
+  static buildSortFilterForm() {
+    newCardForm.innerHTML = ""
+    newCardForm.innerHTML += `
+      <select id="sort-by" name="sort by">
+        <option value="default"> Default </option>
+        <option value="newest"> Newest card </option>
+        <option value="oldest"> Oldest card </option>
+        <option value="abc"> A-Z </option>
+        <option value="zyx"> Z-A </option>
+      </select>
+      <button type="sort"> Sort Cards </button>`
+    newCardForm[1].addEventListener("click", e => {
+      e.preventDefault();
+      console.log("hi")
+    })
   }
 
 }
