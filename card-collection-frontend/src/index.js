@@ -97,7 +97,8 @@ class Card {
 
   static fetchCardDelete() {
     let card_id = this.id
-    let cardData = document.getElementById(`${this.parentElement.parentElement.id}`)
+    let cardCollection = this.parentElement.parentElement.parentElement.parentElement
+    let cardData = cardCollection.querySelector(`tr#${this.parentElement.parentElement.id}`)
     const configObj = {
       method: 'DELETE',
       headers: { 
@@ -118,9 +119,19 @@ class Card {
     };
 
     static checkForDublicate(table, name) {
-      let doesCardExist = document.getElementById(`card-row-${name}`)
-      // add another if condition where if id="all-cards" then do a different condition with a fetch
-      if (doesCardExist && table.id === doesCardExist.parentElement.parentElement.id) {
+      // checks for duplicates when only cards are displayed
+      if (table.parentElement.id === "all-cards") {
+        let duplicateName = document.getElementById(`card-row-${name}`) 
+        if (duplicateName && duplicateName.parentElement.id === collectionOptions.value) {
+          return false
+        } else {
+          return true
+        }
+      }
+
+      // checks for duplicates when collections are displayed
+      let cardTable = document.getElementById(`${table.id}`)
+      if (cardTable.querySelector(`tr#card-row-${name}`)) {
         return false
       } else {
         return true 
@@ -137,7 +148,7 @@ class Card {
       collectionContainer.innerHTML += `<table id="all-cards"> </table>`
       let table = document.getElementById("all-cards");
       cards.forEach(card => { 
-        table.innerHTML += `<tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr>`
+        table.innerHTML += `<tbody id="${card.collection.name}"> <tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr> </tbody>`
       })
       Generate.addDeleteButtonToCards();
     }

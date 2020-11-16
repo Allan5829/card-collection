@@ -2,7 +2,7 @@ class CardsController < ApplicationController
 
     def index
         cards = Card.all
-        render json: cards
+        render json: cards, include: [:collection]
     end
 
     def create
