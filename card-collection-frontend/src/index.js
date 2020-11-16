@@ -69,11 +69,8 @@ class Card {
     };
 
     let table = document.getElementById(collectionOptions.value);
-    if (table === null) { 
-      // would only ever be null if collections aren't displayed
-      table = document.getElementById("all-cards")
-    }
-    if (Card.checkForDublicate(table, newCard.name)) { //if there is no dublicate card a new one is created
+    if (Card.checkForDublicate(table, newCard.name)) { 
+      //if there is no dublicate card a new one is created
       fetch(`${BACKEND_URL}/cards`, configObj)
         .then(response => response.json())
         .then(card => Card.addCardToTable(card, table))
@@ -119,17 +116,6 @@ class Card {
     };
 
     static checkForDublicate(table, name) {
-      // checks for duplicates when only cards are displayed
-      if (table.parentElement.id === "all-cards") {
-        let duplicateName = document.getElementById(`card-row-${name}`) 
-        if (duplicateName && duplicateName.parentElement.id === collectionOptions.value) {
-          return false
-        } else {
-          return true
-        }
-      }
-
-      // checks for duplicates when collections are displayed
       let cardTable = document.getElementById(`${table.id}`)
       if (cardTable.querySelector(`tr#card-row-${name}`)) {
         return false
@@ -145,12 +131,11 @@ class Card {
     }
 
     static addOnlyCardsToTable(cards) {
-      collectionContainer.innerHTML += `<table id="all-cards"> </table>`
+      collectionContainer.innerHTML += `<ul id="all-cards"> </ul>`
       let table = document.getElementById("all-cards");
       cards.forEach(card => { 
-        table.innerHTML += `<tbody id="${card.collection.name}"> <tr id="card-row-${card.name}"> <td> <button id="${card.id}">X</button> ${card.name} </td> </tr> </tbody>`
+        table.innerHTML += `<li> ${card.name} </li>`
       })
-      Generate.addDeleteButtonToCards();
     }
 
 }
@@ -186,7 +171,8 @@ class Generate {
     //There was a bug with the commented code below. It is kept for the purposes of dublicating the error
     //  to see why it created the bug it did.
 
-    // (`card-row-${card.name}`) = arguement(id)
+    //line 95 Generate.addDeleteButtonToNewCard(table) change (table) => (`card-row-${card.name}`)
+    //change this method's arguement from (table) => (id)
     //let cardRow = document.getElementById(id)
     //cardRow.querySelector("button").addEventListener("click", Card.deleteCard)
 
