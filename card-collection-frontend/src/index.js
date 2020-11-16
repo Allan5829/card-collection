@@ -1,11 +1,13 @@
 const collectionContainer = document.getElementById("collection-container");
-const collectionOptions = document.getElementById("form-collection-options");
+let collectionOptions
 const newCardForm = document.getElementById("new-card-form"); 
-const yesCol = document.getElementById("yesCol");
-const noCol = document.getElementById("noCol");
+const allCol = document.getElementById("allCol");
+const allCard = document.getElementById("allCard");
 const BACKEND_URL = 'http://localhost:3000';
 
 document.addEventListener("DOMContentLoaded", () => {
+  Generate.buildNewCardForm();
+  collectionOptions = document.getElementById("form-collection-options")
   Collection.fetchCollectionIndex();
   Generate.addEventsToButtons();
 });
@@ -142,27 +144,42 @@ class Card {
 
 class Generate {
 
+  static buildNewCardForm() {
+    newCardForm.innerHTML += `
+      <label for="collections">What collection is the card from:</label>
+      <select name="collection" id="form-collection-options">
+      </select>
+      
+      <label for="card-name">Card Name:</label>
+      <input type="text" id="card-name" name="card-name">
+
+      <button type="submit"> Add Card </button>
+    `
+  }
+
   static addEventsToButtons() {
-    yesCol.disabled = true;
-    noCol.disabled = false;
+    allCol.disabled = true;
 
     newCardForm.addEventListener("submit", e => {
       e.preventDefault();
       Card.fetchCardNew();
     })
     
-    yesCol.addEventListener("click", e => {
-      yesCol.disabled = true;
-      noCol.disabled = false;
+    allCol.addEventListener("click", e => {
+      allCol.disabled = true;
+      allCard.disabled = false;
       collectionContainer.innerHTML = ""
       collectionOptions.innerHTML = ""
+      Generate.buildNewCardForm();
+      collectionOptions = document.getElementById("form-collection-options")
       Collection.fetchCollectionIndex();
     })
 
-    noCol.addEventListener("click", e => {
-      noCol.disabled = true;
-      yesCol.disabled = false;
+    allCard.addEventListener("click", e => {
+      allCard.disabled = true;
+      allCol.disabled = false;
       collectionContainer.innerHTML = ""
+      newCardForm.innerHTML = ""
       Card.fetchCardIndex();
     })
   }
