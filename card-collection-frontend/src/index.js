@@ -202,16 +202,21 @@ class Generate {
 
   static addEventsToButtons() {
     allCol.disabled = true;
+    allCol.style.color = "yellow";
     
     allCol.addEventListener("click", e => {
+      allCol.style.color = "yellow";
       allCol.disabled = true;
+      allCard.style.color = "black";
       allCard.disabled = false;
       Generate.buildNewCardForm();
       Collection.fetchCollectionIndex();
     })
 
     allCard.addEventListener("click", e => {
+      allCard.style.color = "yellow";
       allCard.disabled = true;
+      allCol.style.color = "black";
       allCol.disabled = false;
       Generate.buildSortFilterForm();
       Card.fetchCardIndex();

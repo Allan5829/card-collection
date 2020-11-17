@@ -3,26 +3,22 @@ body {
     padding: 0;
   }
 
-  header h2 {
-    background-color: rgb(253, 116, 116);
+  header h1 {
+    background-color: rgb(199, 199, 199);
     margin: auto;
-    height: 50px;
+    width: 40%;
+    padding: 15px;
     color:black;
+    text-align: center;
   }
 
-  form {
-      background-color: antiquewhite;
-      display: block;
-      padding: 10px;
-      border: 10px solid rgb(156, 228, 233);
-  }
-
-  table {
-    padding: 10px;
-  }
-
-  main {
-    border: 10px solid rgb(255, 204, 93);
+  .allButtons {
+    background-color: rgb(215, 231, 250);
+    display: block;
+    padding: 15px;
+    border: 10px solid rgb(156, 228, 233);
+    width: 65%;
+    margin: auto;
   }
 
   button {
@@ -30,7 +26,28 @@ body {
     background-color: rgb(251, 255, 1);
   }
 
-  main button {
-      color: rgb(0, 0, 0);
-      background-color: rgb(156, 228, 233);
+  .viewButtons {
+    width: 50%;
+    margin: auto;
+    text-align: center;
   }
+
+  main {
+    width: 65%;
+    margin: auto;
+    text-align: center;
+    border: 10px solid rgb(199, 199, 199);
+  }
+
+  table {
+      padding: 10px;
+      background-color: rgb(230, 230, 230);
+      width: 100%;
+      margin: auto;
+      text-align: center;
+    }
+
+
+  
+
+  
