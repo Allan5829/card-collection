@@ -12,13 +12,13 @@ body {
     text-align: center;
   }
 
-  .allButtons {
+  .formButtons {
     background-color: rgb(215, 231, 250);
-    display: block;
     padding: 15px;
     border: 10px solid rgb(156, 228, 233);
-    width: 65%;
+    width: 55%;
     margin: auto;
+    text-align: center;
   }
 
   button {
@@ -26,28 +26,37 @@ body {
     background-color: rgb(251, 255, 1);
   }
 
-  .viewButtons {
-    width: 50%;
-    margin: auto;
-    text-align: center;
-  }
-
   main {
-    width: 65%;
+    padding: 15px;
+    width: 55%;
     margin: auto;
-    text-align: center;
+    text-align: justify;
     border: 10px solid rgb(199, 199, 199);
+    background-color: rgb(230, 230, 230);
   }
 
   table {
-      padding: 10px;
-      background-color: rgb(230, 230, 230);
-      width: 100%;
-      margin: auto;
-      text-align: center;
-    }
+    padding: 5px;
+    margin: auto;
+  }
 
+  ul {
+    padding: 15px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+  }
 
-  
+  li {
+    margin: auto;
+    width: 20%;
+    background-color: rgb(195, 252, 255);
+    border: 5px solid rgb(230, 230, 230);
+  }
+
+  main button {
+    color: rgb(0, 0, 0);
+    background-color: rgb(156, 228, 233);
+  }
 
   
