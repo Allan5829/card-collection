@@ -21,6 +21,7 @@ class Collection {
   }
 
   static createCollectionTables(array) {
+    collectionContainer.innerHTML = ""
     let collNames = array.map(x => x.name)
     collNames.forEach(x => {
       collectionContainer.innerHTML += `<table id="${x}"> </table>`
@@ -126,12 +127,11 @@ class Card {
       .then(cards => Card.createCards(cards))
     }
 
-    static addOnlyCardsToTable(cards) {
-      collectionContainer.innerHTML += `<ul id="all-cards"> </ul>`
-      let table = document.getElementById("all-cards");
-      cards.forEach(card => { 
-        table.innerHTML += `<li> ${card.cardName} </li>`
+    static createCards(cards) {
+      allCardArray = cards.map(x => {
+        return new Card(x.name, x.collection.name, x.created_at)
       })
+      Card.addOnlyCardsToTable(allCardArray);
     }
 
     constructor(cardName, setName, createdAt) {
@@ -140,12 +140,41 @@ class Card {
       this.createdAt = createdAt;
     }
 
-    static createCards(cards) {
-      allCardArray = cards.map(x => {
-        return new Card(x.name, x.collection.name, x.created_at)
+    static addOnlyCardsToTable(cards) {
+      collectionContainer.innerHTML = ""
+      collectionContainer.innerHTML += `<ul id="all-cards"> </ul>`
+      let table = document.getElementById("all-cards");
+      cards.forEach(card => { 
+        table.innerHTML += `<li> ${card.cardName} </li>`
       })
-      console.log(allCardArray)
-      Card.addOnlyCardsToTable(allCardArray);
+    }
+
+    static filterSort(array) {
+      let cardSort = newCardForm[0].value
+      let cardFilter = newCardForm[1].value
+      let newArray 
+
+      // Filter
+      if (cardFilter !== "none") {
+        newArray = array.filter( x => {
+          return x.setName === cardFilter
+        })
+      } else {
+        newArray = array.slice(0);
+      }
+
+      // Sort
+      if (cardSort === "newest") {
+        newArray = newArray.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+      } else if (cardSort === "oldest") {
+        newArray = newArray.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      } else if (cardSort === "abc") {
+        newArray = newArray.sort((a, b) => a.cardName.localeCompare(b.cardName))
+      } else { // "zyx"
+        newArray = newArray.sort((a, b) => b.cardName.localeCompare(a.cardName))
+      }
+
+      Card.addOnlyCardsToTable(newArray)
     }
 
 }
@@ -177,7 +206,6 @@ class Generate {
     allCol.addEventListener("click", e => {
       allCol.disabled = true;
       allCard.disabled = false;
-      collectionContainer.innerHTML = ""
       Generate.buildNewCardForm();
       Collection.fetchCollectionIndex();
     })
@@ -185,7 +213,6 @@ class Generate {
     allCard.addEventListener("click", e => {
       allCard.disabled = true;
       allCol.disabled = false;
-      collectionContainer.innerHTML = ""
       Generate.buildSortFilterForm();
       Card.fetchCardIndex();
     })
@@ -232,7 +259,7 @@ class Generate {
     filterSelect.innerHTML += `<option value="none"> None </option>` + collectionOptions.innerHTML
     newCardForm[2].addEventListener("click", e => {
       e.preventDefault();
-      console.log("hi")
+      Card.filterSort(allCardArray);
     })
   }
 
