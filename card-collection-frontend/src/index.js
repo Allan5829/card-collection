@@ -28,12 +28,6 @@ class Collection {
     Card.addExistingCards(array);
   }
 
-  static fetchCollectionShow(id) {
-    fetch(`${BACKEND_URL}/collections` + `/${id}`)
-    .then(response => response.json())
-    .then(collection => Card.checkForDublicate(collection))
-  }
-
 }
 
 class Card {
@@ -207,15 +201,21 @@ class Generate {
   static buildSortFilterForm() {
     newCardForm.innerHTML = ""
     newCardForm.innerHTML += `
+      <label for="sort">Sort by:</label>
       <select id="sort-by" name="sort by">
-        <option value="default"> Default </option>
         <option value="newest"> Newest card </option>
         <option value="oldest"> Oldest card </option>
         <option value="abc"> A-Z </option>
         <option value="zyx"> Z-A </option>
       </select>
-      <button type="sort"> Sort Cards </button>`
-    newCardForm[1].addEventListener("click", e => {
+      <label for="filter">Filter by collection:</label>
+      <select id="filter" name="filter">
+      </select>
+      <button type="submit"> Apply </button>`
+
+    let filterSelect = document.getElementById("filter");
+    filterSelect.innerHTML += `<option value="none"> None </option>` + collectionOptions.innerHTML
+    newCardForm[2].addEventListener("click", e => {
       e.preventDefault();
       console.log("hi")
     })
