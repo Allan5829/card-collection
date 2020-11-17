@@ -4,6 +4,7 @@ const newCardForm = document.getElementById("new-card-form");
 const allCol = document.getElementById("allCol");
 const allCard = document.getElementById("allCard");
 const BACKEND_URL = 'http://localhost:3000';
+let allCardArray
 
 document.addEventListener("DOMContentLoaded", () => {
   Generate.buildNewCardForm();
@@ -122,15 +123,29 @@ class Card {
     static fetchCardIndex() {
       fetch(`${BACKEND_URL}/cards`)
       .then(response => response.json())
-      .then(cards => Card.addOnlyCardsToTable(cards))
+      .then(cards => Card.createCards(cards))
     }
 
     static addOnlyCardsToTable(cards) {
       collectionContainer.innerHTML += `<ul id="all-cards"> </ul>`
       let table = document.getElementById("all-cards");
       cards.forEach(card => { 
-        table.innerHTML += `<li> ${card.name} </li>`
+        table.innerHTML += `<li> ${card.cardName} </li>`
       })
+    }
+
+    constructor(cardName, setName, createdAt) {
+      this.cardName = cardName;
+      this.setName = setName;
+      this.createdAt = createdAt;
+    }
+
+    static createCards(cards) {
+      allCardArray = cards.map(x => {
+        return new Card(x.name, x.collection.name, x.created_at)
+      })
+      console.log(allCardArray)
+      Card.addOnlyCardsToTable(allCardArray);
     }
 
 }
