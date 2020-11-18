@@ -53,7 +53,7 @@ class Card {
 
   static fetchCardNew() {
     let newCard = {
-      name: document.getElementById("card-name").value,
+      name: Card.sanitize(document.getElementById("card-name").value),
       collection_id: document.getElementById(`form-collection-${collectionOptions.value}`).index + 1
     };
 
@@ -77,6 +77,14 @@ class Card {
       alert("You can't add a card to a collection that already has a card with that name!");
     }
     
+  }
+
+  static sanitize(string) {
+    let newString = string.split(' ');
+    for (let i = 0; i < newString.length; i++) {
+        newString[i] = newString[i].replace(/[^A-Za-z0-9]/g, ''); 
+    }
+    return newString.join(' ');
   }
 
   static addCardToTable(card, table) {
@@ -145,7 +153,7 @@ class Card {
       collectionContainer.innerHTML += `<ul id="all-cards"> </ul>`
       let table = document.getElementById("all-cards");
       cards.forEach(card => { 
-        table.innerHTML += `<li> ${card.cardName} </li>`
+        table.innerHTML += `<li> - ${card.cardName} </li>`
       })
     }
 

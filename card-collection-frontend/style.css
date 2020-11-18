@@ -30,7 +30,6 @@ body {
     padding: 15px;
     width: 55%;
     margin: auto;
-    text-align: justify;
     border: 10px solid rgb(199, 199, 199);
     background-color: rgb(230, 230, 230);
 
@@ -40,19 +39,20 @@ body {
     padding-left: 42.5%
   }
 
+  table tbody {
+    text-align: left;
+  }
+
   ul {
-    padding: 0;
-    width: 100%;
     margin: 0;
-    text-align: justify;
     list-style: none;
+    padding-left: 42.5%
   }
 
   li {
-    width: 25%;
+    width: 175px;
     background-color: rgb(195, 252, 255);
     border: 5px solid rgb(230, 230, 230);
-    padding-left: 42.5%
   }
 
   main button {
