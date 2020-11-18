@@ -34,6 +34,7 @@ class Collection {
 
 class Card {
 
+  // methods related to "View All Collections"
   static addExistingCards(array) {
     // for each collection, add some html with unique information for each card in a collection
     array.forEach( collection => {
@@ -91,8 +92,8 @@ class Card {
 
   static fetchCardDelete() {
     let card_id = this.id
-    let cardCollection = this.parentElement.parentElement.parentElement.parentElement
-    let cardData = cardCollection.querySelector(`tr#${this.parentElement.parentElement.id}`)
+    let cardData = this.parentElement.parentElement
+    let table = cardData.parentElement.parentElement
     const configObj = {
       method: 'DELETE',
       headers: { 
@@ -102,7 +103,6 @@ class Card {
 
     // if the user is deleting the last card in the card's collection then the collection header will 
     //  also be removed
-    let table = cardData.parentElement.parentElement;
     if (table.rows.length === 2) { 
       // this checks for 2 rows because one is the header and the other is the last card
       table.rows[0].parentElement.remove()
@@ -113,14 +113,14 @@ class Card {
     };
 
     static checkForDublicate(table, name) {
-      let cardTable = document.getElementById(`${table.id}`)
-      if (cardTable.querySelector(`tr#card-row-${name}`)) {
+      if (table.querySelector(`tr#card-row-${name}`)) {
         return false
       } else {
         return true 
       }
     }
 
+    // methods related to "View All Cards"
     static fetchCardIndex() {
       fetch(`${BACKEND_URL}/cards`)
       .then(response => response.json())
@@ -188,12 +188,13 @@ class Generate {
       <select name="collection" id="form-collection-options">
       </select>
       
-      <label for="card-name">Card Name:</label>
+      <label for="card-name">Card name:</label>
       <input type="text" id="card-name" name="card-name">
 
       <button type="submit"> Add Card </button>
     `
     collectionOptions = document.getElementById("form-collection-options")
+
     newCardForm[2].addEventListener("click", e => {
       e.preventDefault();
       Card.fetchCardNew();
@@ -201,23 +202,18 @@ class Generate {
   }
 
   static addEventsToButtons() {
-    allCol.disabled = true;
-    allCol.style.color = "yellow";
+    allCol.hidden = true;
     
     allCol.addEventListener("click", e => {
-      allCol.style.color = "yellow";
-      allCol.disabled = true;
-      allCard.style.color = "black";
-      allCard.disabled = false;
+      allCol.hidden = true;
+      allCard.hidden = false;
       Generate.buildNewCardForm();
       Collection.fetchCollectionIndex();
     })
 
     allCard.addEventListener("click", e => {
-      allCard.style.color = "yellow";
-      allCard.disabled = true;
-      allCol.style.color = "black";
-      allCol.disabled = false;
+      allCard.hidden = true;
+      allCol.hidden = false;
       Generate.buildSortFilterForm();
       Card.fetchCardIndex();
     })
@@ -258,10 +254,12 @@ class Generate {
       <label for="filter">Filter by collection:</label>
       <select id="filter" name="filter">
       </select>
-      <button type="submit"> Apply </button>`
+      <button type="submit"> Apply </button>
+      `
 
     let filterSelect = document.getElementById("filter");
     filterSelect.innerHTML += `<option value="none"> None </option>` + collectionOptions.innerHTML
+
     newCardForm[2].addEventListener("click", e => {
       e.preventDefault();
       Card.filterSort(allCardArray);
