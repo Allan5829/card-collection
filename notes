@@ -1,3 +1,14 @@
-Project Setup https://github.com/learn-co-students/js-spa-project-instructions-online-web-sp-000/blob/master/setup-walkthrough.md
+static addDeleteButtonToNewCard(table) {
+    //There was a bug with the commented code below. It is kept for the purposes of dublicating the error
+    //  to see why it created the bug it did.
 
-Project Details https://learn.co/tracks/online-software-engineering-structured/front-end-web-programming/project-mode/javascript-and-rails-project-instructions 
+    //line 95 Generate.addDeleteButtonToNewCard(table) change (table) => (`card-row-${card.name}`)
+    //change this method's arguement from (table) => (id)
+    //let cardRow = document.getElementById(id)
+    //cardRow.querySelector("button").addEventListener("click", Card.deleteCard)
+
+    let buttons = table.querySelectorAll("button")
+    for (let button of buttons) {
+      button.addEventListener("click", Card.fetchCardDelete)
+    }
+  }
