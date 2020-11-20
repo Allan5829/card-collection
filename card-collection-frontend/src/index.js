@@ -172,9 +172,9 @@ class Card {
       }
 
       // Sort
-      if (cardSort === "newest") {
+      if (cardSort === "oldest") {
         newArray = newArray.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-      } else if (cardSort === "oldest") {
+      } else if (cardSort === "newest") {
         newArray = newArray.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       } else if (cardSort === "abc") {
         newArray = newArray.sort((a, b) => a.cardName.localeCompare(b.cardName))
